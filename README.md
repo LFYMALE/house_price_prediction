@@ -99,3 +99,70 @@ Six regression algorithms were evaluated using a 60% / 20% / 20% train/validatio
 
 * **Final Selected Model:** `StandardScaler` + `Lasso(alpha=100.0)`
 * **Held-Out Test Set Metrics:** **RMSE = $10,082.26** | **MAE = $8,190.77** | **$R^2$ = 0.99842**
+
+## Deployment & Usage
+
+The trained model is served as a REST API with a `/predict` endpoint. It can be run locally with Python or inside a Docker container.
+
+### 1. Environment Setup
+
+Create and activate a virtual environment, then install the dependencies:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate        # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 2. Train and Export the Model
+
+Run `train.py` to train the `StandardScaler` + `Lasso(alpha=100.0)` pipeline, evaluate it on the test split, and save the serialized model to `model.bin`:
+
+```bash
+python train.py
+```
+
+### 3. Run the Prediction Service
+
+#### Option A: With Docker
+
+Build the image and run the container on port `9696`:
+
+```bash
+docker build -t house-price-predictor .
+docker run --rm -p 9696:9696 --name house-api house-price-predictor
+```
+
+#### Option B: Locally with Python
+
+Start the prediction service directly:
+
+```bash
+python predict.py
+```
+
+### 4. Test the `/predict` Endpoint
+
+Once the service is running, send a `POST` request with the house features, either with the provided test script:
+
+```bash
+python test_service.py
+```
+
+or with `curl`:
+
+```bash
+curl -X POST http://localhost:9696/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "square_footage": 2500,
+    "num_bedrooms": 4,
+    "num_bathrooms": 3,
+    "year_built": 2015,
+    "lot_size": 2.5,
+    "garage_size": 2,
+    "neighborhood_quality": 8
+  }'
+```
+
+The API returns the predicted house price as a JSON response.
