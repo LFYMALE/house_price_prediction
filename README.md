@@ -68,3 +68,12 @@ All input features are numerical or ordinal, so no categorical encoding is requi
 ## Expected Outcome
 
 The final deliverable is a trained and validated regression model, exposed as a prediction service, that accepts the characteristics of a house and returns an estimated price. This gives agencies, platforms, buyers, and sellers a practical tool for **price estimation, offer evaluation, and value-driver analysis**.
+
+
+## Exploratory Data Analysis (EDA) & Key Insights
+
+An in-depth exploratory analysis was conducted in `notebook.ipynb` on the 1,000-row housing dataset:
+* **Data Quality:** All 8 columns are numeric (`int64` / `float64`) with **no missing values**, **no duplicate rows**, and **no IQR outliers**.
+* **Target Distribution (`house_price`):** Values span from **$111,626.85** to **$1,108,236.84** (median: **$628,267.29**). The distribution is symmetric (`skewness = -0.0640`), making a log transformation unnecessary.
+* **Feature Importance & Correlations:** `square_footage` exhibits a near-perfect linear correlation with price (`r = 0.991`) and accounts for **98.6%** of Random Forest feature importance, followed by `year_built`, `lot_size`, and `num_bedrooms`. All VIF scores are ~1.01, confirming zero multicollinearity.
+* **Feature Selection:** Candidate derived features (`house_age`, `sqft_per_room`, `building_to_lot_ratio`, `total_rooms`) slightly worsened validation RMSE ($20,000.94 vs. $19,825.27), so only the **7 original features** were retained for model training.
