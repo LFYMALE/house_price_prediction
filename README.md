@@ -79,3 +79,23 @@ An in-depth exploratory analysis was conducted in `notebook.ipynb` on the 1,000-
 * **Target Distribution (`house_price`):** Values span from **$111,626.85** to **$1,108,236.84** (median: **$628,267.29**). The distribution is symmetric (`skewness = -0.0640`), making a log transformation unnecessary.
 * **Feature Importance & Correlations:** `square_footage` exhibits a near-perfect linear correlation with price (`r = 0.991`) and accounts for **98.6%** of Random Forest feature importance, followed by `year_built`, `lot_size`, and `num_bedrooms`. All VIF scores are ~1.01, confirming zero multicollinearity.
 * **Feature Selection:** Candidate derived features (`house_age`, `sqft_per_room`, `building_to_lot_ratio`, `total_rooms`) slightly worsened validation RMSE ($20,000.94 vs. $19,825.27), so only the **7 original features** were retained for model training.
+
+
+## Model Training & Evaluation Results
+
+Six regression algorithms were evaluated using a 60% / 20% / 20% train/validation/test split and 5-fold cross-validation (`RMSE` as primary metric):
+
+| Model | Validation RMSE ($) | Validation MAE ($) | Validation $R^2$ | 5-Fold CV Mean RMSE ($) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Tuned Lasso (`alpha=100.0`)** | — | — | — | **$9,752.39** |
+| **Tuned Ridge (`alpha=0.001`)** | — | — | — | $9,757.50 |
+| **Ridge (`alpha=1.0`)** | $9,295.68[cite: 2] | $7,227.14[cite: 2] | 0.999[cite: 2] | $9,765.62[cite: 2] |
+| **Lasso (`alpha=1.0`)** | $9,343.42[cite: 2] | $7,277.00[cite: 2] | 0.999[cite: 2] | $9,757.42[cite: 2] |
+| **Linear Regression** | $9,343.65[cite: 2] | $7,277.14[cite: 2] | 0.999[cite: 2] | $9,757.50[cite: 2] |
+| **Tuned Gradient Boosting** | — | — | — | $14,147.90 |
+| **Gradient Boosting (default)** | $15,968.70[cite: 2] | $12,073.39[cite: 2] | 0.996[cite: 2] | $16,027.76[cite: 2] |
+| **Random Forest (default)** | $21,636.92[cite: 2] | $16,889.32[cite: 2] | 0.993[cite: 2] | $22,203.90[cite: 2] |
+| **Decision Tree (default)** | $32,781.71[cite: 2] | $26,153.43[cite: 2] | 0.984[cite: 2] | $32,821.38[cite: 2] |
+
+* **Final Selected Model:** `StandardScaler` + `Lasso(alpha=100.0)`
+* **Held-Out Test Set Metrics:** **RMSE = $10,082.26** | **MAE = $8,190.77** | **$R^2$ = 0.99842**
