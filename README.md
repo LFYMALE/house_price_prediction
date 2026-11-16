@@ -183,7 +183,7 @@ The API returns the predicted house price as a JSON response, for example:
 ```
 .
 ├── data/
-│   └── house_price.csv      # Raw dataset (Kaggle)
+│   └── house_price_regression_dataset.csv      # Raw dataset (Kaggle)
 ├── notebook.ipynb           # EDA, model comparison and hyperparameter tuning
 ├── train.py                 # Trains the final pipeline and saves model.bin
 ├── predict.py               # Web service exposing the /predict endpoint
