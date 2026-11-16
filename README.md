@@ -40,6 +40,8 @@ Given details such as square footage, number of bedrooms and bathrooms, year of 
 
 The project uses the **Home Value Insights** dataset from Kaggle ([add the link here]), a regression dataset designed for beginners. It contains **1,000 rows**, each representing one house.
 
+### Dataset link: https://www.kaggle.com/datasets/prokshitha/home-value-insights
+
 ### Columns
 
 | Column | Type | Description |
